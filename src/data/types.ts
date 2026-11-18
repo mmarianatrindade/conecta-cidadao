@@ -1,0 +1,27 @@
+export type CategoryId = 'saude' | 'seguranca' | 'documentos' | 'assistencia' | 'justica' | 'transporte' | 'educacao' | 'trabalho' | 'ambiente';
+export type PlaceType = 'presencial' | 'digital';
+export type Category = { id: CategoryId; name: string; icon: string; tint: string; soft: string; caption: string };
+export type Unit = {
+  id: string;
+  category: CategoryId;
+  name: string;
+  kind: string;
+  type: PlaceType;
+  address?: string;
+  region: string;
+  summary: string;
+  services: string[];
+  keywords: string[];
+  access: string;
+  before: string[];
+  hours?: string;
+  source: string;
+  sourceLabel: string;
+  checkedAt: string;
+  caution?: string;
+};
+export type Journey = { id: string; unitId: string; title: string; note: string; plannedDate: string; status: 'planejado' | 'concluido'; createdAt: string };
+export type Task = { id: string; journeyId: string; text: string; done: boolean };
+export type Feedback = { id: string; unitId: string; date: string; waiting: string; resolved: 'sim' | 'parcial' | 'nao'; access: 'adequado' | 'barreira' | 'nao-avaliado'; clarity: 'claro' | 'confuso' | 'nao-avaliado'; comment: string };
+export type Problem = { id: string; unitId: string; description: string; createdAt: string };
+export type AppTab = 'inicio' | 'explorar' | 'jornada' | 'feedbacks';

@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Conecta Cidadão",
+    "slug": "conecta-cidadao",
+    "scheme": "conectacidadao",
+    "version": "1.2.1",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "primaryColor": "#0A2142",
+    "backgroundColor": "#F4F7FC",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "br.fiap.conectacidadao"
+    },
+    "android": {
+      "package": "br.fiap.conectacidadao",
+      "edgeToEdgeEnabled": true
+    },
+    "experiments": {
+      "tsconfigPaths": true
+    },
+    "plugins": [],
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F4F7FC"
+    }
+  }
+}

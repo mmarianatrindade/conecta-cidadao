@@ -45,13 +45,35 @@ export function makeAddressServer({
   apiKey = process.env.GOOGLE_MAPS_API_KEY,
   fetchImpl = fetch,
   endpoint = DEFAULT_ENDPOINT,
-  rateMax = 40,
+  rateMax = Number(process.env.RATE_LIMIT_MAX || 40),
   serveDemo = true,
+  allowedOrigins = process.env.ALLOWED_ORIGINS,
 } = {}) {
   const calls = new Map();
+  const origins = typeof allowedOrigins === 'string'
+    ? new Set(allowedOrigins.split(',').map(value => value.trim()).filter(Boolean))
+    : new Set();
   return createServer(async (req, res) => {
     try {
       const url = new URL(req.url || '/', 'http://localhost');
+      const requestOrigin = req.headers.origin;
+      const isAllowedOrigin = !requestOrigin || origins.size === 0 || origins.has(requestOrigin);
+      const corsHeaders = isAllowedOrigin && requestOrigin ? {
+        'Access-Control-Allow-Origin': requestOrigin,
+        'Vary': 'Origin',
+      } : {};
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader('Referrer-Policy', 'no-referrer');
+      res.setHeader('X-Frame-Options', 'DENY');
+      for (const [header, value] of Object.entries(corsHeaders)) res.setHeader(header, value);
+      if (req.method === 'OPTIONS') {
+        res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Accept');
+        res.writeHead(isAllowedOrigin ? 204 : 403);
+        res.end();
+        return;
+      }
+      if (!isAllowedOrigin) return json(res, 403, { error: 'Origem não autorizada.' }, corsHeaders);
       if (req.method !== 'GET') return json(res, 405, { error: 'Método não permitido.' });
       if (url.pathname === '/health') return json(res, 200, { running: true, googleConfigured: hasUsableApiKey(apiKey), provider: 'Places API (New)' });
       if (url.pathname === '/demo' && serveDemo) {

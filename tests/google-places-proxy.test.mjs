@@ -71,6 +71,25 @@ test('placeholder credential cannot look configured', async () => {
     const r = await fetch(`${url}/api/address/autocomplete?q=Rua%20Augusta&sessionToken=${TOKEN}`);
     assert.equal(r.status,503);
   });
+  test('browser origin is rejected when not allowlisted', async () => {
+    await withServer({
+      apiKey: 'fake-test-key-not-for-real-google',
+      allowedOrigins: 'https://conecta.example',
+    }, async url => {
+      const r = await fetch(`${url}/health`, { headers: { Origin: 'https://evil.example' } });
+      assert.equal(r.status, 403);
+    });
+  });
+  test('allowlisted browser origin receives CORS headers', async () => {
+    await withServer({
+      apiKey: 'fake-test-key-not-for-real-google',
+      allowedOrigins: 'https://conecta.example',
+    }, async url => {
+      const r = await fetch(`${url}/health`, { headers: { Origin: 'https://conecta.example' } });
+      assert.equal(r.status, 200);
+      assert.equal(r.headers.get('access-control-allow-origin'), 'https://conecta.example');
+    });
+  });
 });
 test('Google 403 produces an actionable message but never exposes key', async () => {
   await withServer({ apiKey: 'fake-test-key-not-for-real-google', fetchImpl: async () => new Response(JSON.stringify({error:{status:'PERMISSION_DENIED',message:'sensitive account data'}}), {status:403})}, async url => {

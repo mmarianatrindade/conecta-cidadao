@@ -83,6 +83,13 @@ Para editar ou ampliar o catálogo, siga a estrutura em `src/data/catalog.ts` e 
 - Em situações médicas e policiais, informações cadastrais não substituem orientação de emergência.
 - Fontes oficiais e relatos pessoais são apresentados separadamente.
 
+## CI e operação
+
+- GitHub Actions executa TypeScript e testes do catálogo/proxy a cada push e pull request.
+- O servidor aceita `ALLOWED_ORIGINS` como lista separada por vírgulas e `RATE_LIMIT_MAX` para ajustar o limite local por IP.
+- Em produção, mantenha HTTPS, restrições da chave no Google Cloud, limites compartilhados persistentes e monitoramento de consumo.
+- Cada unidade do catálogo pode declarar `coordinates`, `reviewedBy` e `sourceHistory`; o validador verifica coordenadas e fontes quando esses campos existirem.
+
 ## Onde continuar
 
 1. Validar problemas reais com 6–8 entrevistas e testes de usabilidade.

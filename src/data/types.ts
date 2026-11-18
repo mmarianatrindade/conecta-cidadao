@@ -8,6 +8,7 @@ export type Unit = {
   kind: string;
   type: PlaceType;
   address?: string;
+  coordinates?: { latitude: number; longitude: number };
   region: string;
   summary: string;
   services: string[];
@@ -18,6 +19,8 @@ export type Unit = {
   source: string;
   sourceLabel: string;
   checkedAt: string;
+  reviewedBy?: string;
+  sourceHistory?: string[];
   caution?: string;
 };
 export type Journey = { id: string; unitId: string; title: string; note: string; plannedDate: string; status: 'planejado' | 'concluido'; createdAt: string };

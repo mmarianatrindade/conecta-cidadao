@@ -8,6 +8,11 @@ const getDatabase = async () => {
       await db.execAsync(`
         PRAGMA journal_mode = WAL;
         PRAGMA foreign_keys = ON;
+        CREATE TABLE IF NOT EXISTS schema_metadata (
+          key TEXT PRIMARY KEY,
+          value TEXT NOT NULL
+        );
+        INSERT OR IGNORE INTO schema_metadata(key, value) VALUES ('schema_version', '1');
         CREATE TABLE IF NOT EXISTS favorites (
           unit_id TEXT PRIMARY KEY,
           saved_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -46,6 +51,19 @@ const getDatabase = async () => {
         );
         CREATE INDEX IF NOT EXISTS idx_tasks_journey ON tasks(journey_id);
       `);
+      const migration = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version');
+      const version = migration?.user_version ?? 0;
+      if (version < 1) {
+        await db.execAsync(`
+          CREATE INDEX IF NOT EXISTS idx_journeys_status ON journeys(status);
+          CREATE INDEX IF NOT EXISTS idx_feedbacks_unit ON feedbacks(unit_id);
+          CREATE INDEX IF NOT EXISTS idx_corrections_unit ON corrections(unit_id);
+          PRAGMA user_version = 1;
+        `);
+      }
+      await db.runAsync(
+        "INSERT OR REPLACE INTO schema_metadata(key, value) VALUES ('schema_version', '1')",
+      );
       return db;
     }).catch(err => { connection = undefined; throw err; });
   }

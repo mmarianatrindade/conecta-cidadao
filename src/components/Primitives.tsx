@@ -1,31 +1,31 @@
 import React, { ReactNode } from 'react';
-import { StyleSheet, View, Text, Pressable, ViewStyle, TextStyle, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, Pressable, ViewStyle, TextStyle, ActivityIndicator, StyleProp } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { T } from '../ui/theme';
 
 export function Icon({name,size=21,color=T.ink}: {name:string,size?:number,color?:string}) {
   return <Ionicons name={name as React.ComponentProps<typeof Ionicons>['name']} size={size} color={color}/>;
 }
-export function Label({children,style}: {children:ReactNode;style?:TextStyle}) {
+export function Label({children,style}: {children:ReactNode;style?:StyleProp<TextStyle>}) {
   return <Text style={[styles.label,style]}>{children}</Text>;
 }
-export function Heading({children,style}: {children:ReactNode;style?:TextStyle}) {
+export function Heading({children,style}: {children:ReactNode;style?:StyleProp<TextStyle>}) {
   return <Text style={[styles.heading,style]}>{children}</Text>;
 }
-export function Body({children,style}: {children:ReactNode;style?:TextStyle}) {
+export function Body({children,style}: {children:ReactNode;style?:StyleProp<TextStyle>}) {
   return <Text style={[styles.body,style]}>{children}</Text>;
 }
-export function Small({children,style}: {children:ReactNode;style?:TextStyle}) {
+export function Small({children,style}: {children:ReactNode;style?:StyleProp<TextStyle>}) {
   return <Text style={[styles.small,style]}>{children}</Text>;
 }
-export function Surface({children,style}: {children:ReactNode;style?:ViewStyle}) {
+export function Surface({children,style}: {children:ReactNode;style?:StyleProp<ViewStyle>}) {
   return <View style={[styles.surface,style]}>{children}</View>;
 }
 export function Rule(){ return <View style={{height:1,backgroundColor:T.line,marginVertical:13}}/>; }
 export function Pill({children,tint=T.green,bg=T.mint}: {children:ReactNode;tint?:string;bg?:string}) {
   return <View style={{backgroundColor:bg,borderRadius:999,paddingHorizontal:11,paddingVertical:6,alignSelf:'flex-start'}}><Text style={{fontSize:11,fontWeight:'700',color:tint}}>{children}</Text></View>;
 }
-export function Button({title,onPress,icon,kind='primary',style,disabled=false,loading=false}: {title:string;onPress:()=>void;icon?:string;kind?:'primary'|'soft'|'outline'|'danger';style?:ViewStyle;disabled?:boolean;loading?:boolean}) {
+export function Button({title,onPress,icon,kind='primary',style,disabled=false,loading=false}: {title:string;onPress:()=>void;icon?:string;kind?:'primary'|'soft'|'outline'|'danger';style?:StyleProp<ViewStyle>;disabled?:boolean;loading?:boolean}) {
   const bg=kind==='primary'?T.navy:kind==='danger'?T.red:kind==='soft'?T.mint:T.white;
   const text=kind==='primary'||kind==='danger'?T.white:T.navy;
   return <Pressable accessibilityRole="button" accessibilityLabel={title} disabled={disabled||loading} onPress={onPress} style={({pressed})=>[styles.button,{backgroundColor:bg,borderColor:kind==='outline'?T.line:bg,opacity:disabled?0.45:pressed?0.8:1},style]}>

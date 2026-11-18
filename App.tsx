@@ -211,7 +211,7 @@ function AppContent() {
   const modalStyle={backgroundColor:T.white,borderTopLeftRadius:30,borderTopRightRadius:30,padding:22,paddingBottom:24+insets.bottom,maxHeight:'90%' as const};
   const closeModal=()=>{if(!workingRef.current)setModal(null);};
   const modalHead=(title:string,desc?:string)=><View style={{marginBottom:14}}><View style={styles.rowBetween}><Heading style={{fontSize:22,flex:1}}>{title}</Heading><RoundButton icon="close" onPress={closeModal} label="Fechar"/></View>{desc?<Small style={{marginTop:6}}>{desc}</Small>:null}</View>;
-  return <SafeAreaView style={styles.root} edges={['top']}><StatusBar barStyle="dark-content" backgroundColor={T.light}/>
+  return <SafeAreaView style={styles.root} edges={['top']}><StatusBar barStyle="dark-content"/>
     {loading?<View style={{flex:1,alignItems:'center',justifyContent:'center',gap:13}}><ActivityIndicator size="large" color={T.green}/><Label>Preparando o Conecta Cidadão...</Label></View>:loadError?<View style={{flex:1,padding:22,alignItems:'center',justifyContent:'center',gap:10}}><Icon name="alert-circle-outline" size={36} color={T.amber}/><Heading>Não foi possível abrir o armazenamento</Heading><Small style={{textAlign:'center'}}>Reinicie o aplicativo ou tente novamente.</Small><Button title="Tentar novamente" onPress={reload}/></View>:<>
       <Animated.View style={{flex:1,opacity}}>{selected?detailScreen(selected):tabsContent()}</Animated.View>
       <View style={[styles.tabBar,{paddingBottom:Math.max(insets.bottom,9)}]}>{NAV.map(n=>{const active=tab===n.id&&!selected;return <Pressable key={n.id} onPress={()=>goTab(n.id)} accessibilityRole="tab" accessibilityState={{selected:active}} accessibilityLabel={n.title} style={{flex:1,alignItems:'center',justifyContent:'center',gap:4,minHeight:57}}><View style={{width:48,height:31,borderRadius:13,backgroundColor:active?T.mint:'transparent',alignItems:'center',justifyContent:'center'}}><Icon name={active?n.active:n.icon} size={21} color={active?T.navy:T.muted}/></View><Text style={{fontSize:10,fontWeight:active?'800':'600',color:active?T.navy:T.muted}} numberOfLines={1}>{n.title}</Text></Pressable>})}</View>
@@ -269,6 +269,7 @@ const styles=StyleSheet.create({
  quickIcon:{width:36,height:36,borderRadius:12,alignItems:'center',justifyContent:'center'},
  quickLabel:{fontSize:11,fontWeight:'700',color:T.navy,textAlign:'center'},
  sectionTitle:{fontSize:18,lineHeight:24,marginTop:25,marginBottom:12},
+ trustIcon:{width:44,height:44,borderRadius:14,backgroundColor:T.white,alignItems:'center',justifyContent:'center'},
  link:{fontSize:12,color:T.blue,fontWeight:'800'},
  categoryGrid:{flexDirection:'row',flexWrap:'wrap',justifyContent:'space-between',gap:10},
  categoryCell:{width:'31%',backgroundColor:T.white,borderWidth:1,borderColor:T.line,paddingVertical:14,paddingHorizontal:7,minHeight:111,borderRadius:19,alignItems:'center',justifyContent:'center',gap:8,shadowColor:T.navy,shadowOpacity:0.02,shadowRadius:8},

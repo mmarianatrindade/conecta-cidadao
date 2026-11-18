@@ -19,6 +19,11 @@ for(const unit of CATALOG){
   assert(unit.name && unit.summary && unit.access && unit.services.length,`Dados incompletos: ${unit.id}`);
   assert(unit.checkedAt && /^\d{4}-\d{2}-\d{2}$/.test(unit.checkedAt),`Data inválida: ${unit.id}`);
   assert(unit.type==='digital'||unit.address,`Endereço não informado: ${unit.id}`);
+  if(unit.coordinates){
+    assert(Number.isFinite(unit.coordinates.latitude)&&unit.coordinates.latitude>=-90&&unit.coordinates.latitude<=90,`Latitude inválida: ${unit.id}`);
+    assert(Number.isFinite(unit.coordinates.longitude)&&unit.coordinates.longitude>=-180&&unit.coordinates.longitude<=180,`Longitude inválida: ${unit.id}`);
+  }
+  if(unit.sourceHistory) assert(unit.sourceHistory.every(value=>/^https:\/\//.test(value)),`Histórico de fonte inválido: ${unit.id}`);
 }
 for(const cat of categories)assert(CATALOG.some(x=>x.category===cat),`Categoria vazia: ${cat}`);
 console.log(`OK: ${CATALOG.length} registros, ${categories.size} categorias, todos com fonte HTTPS.`);
